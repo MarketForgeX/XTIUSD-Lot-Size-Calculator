@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XTIUSD Lot Size Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #0e0e10;
+    --panel: #17171a;
+    --panel-2: #1f1f23;
+    --gold: #c9a24b;
+    --gold-bright: #e8c877;
+    --text: #ede9e0;
+    --muted: #8a8a8f;
+    --danger: #b5544a;
+    --line: #2a2a2e;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(201,162,75,0.07), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(201,162,75,0.05), transparent 40%);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding: 32px 16px 60px;
+  }
+
+  .wrap{ width:100%; max-width: 460px; }
+
+  .eyebrow{
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  h1{
+    font-family: 'Spectral', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--text);
+  }
+
+  .sub{
+    color: var(--muted);
+    font-size: 13.5px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+
+  .field{ margin-bottom: 16px; }
+  .field:last-child{ margin-bottom: 0; }
+
+  label{
+    display:block;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .input-row{
+    display:flex;
+    align-items:center;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 0 12px;
+    transition: border-color 0.15s;
+  }
+  .input-row:focus-within{ border-color: var(--gold); }
+
+  .input-row .prefix{
+    color: var(--muted);
+    font-size: 14px;
+    margin-right: 6px;
+  }
+
+  input[type=number]{
+    flex:1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    padding: 11px 0;
+    width: 100%;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button{
+    -webkit-appearance: none; margin:0;
+  }
+  input[type=number]{ -moz-appearance: textfield; }
+
+  .row2{ display:flex; gap:12px; }
+  .row2 .field{ flex:1; }
+
+  .result{
+    background: linear-gradient(160deg, #1c1a12, #17171a 60%);
+    border: 1px solid rgba(201,162,75,0.35);
+    border-radius: 14px;
+    padding: 20px 22px;
+    text-align:center;
+  }
+
+  .result .label{
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .result .lot{
+    font-family: 'Spectral', serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .result .lot span{ font-size: 20px; color: var(--muted); font-family:'Inter',sans-serif; font-weight:500;}
+
+  .result .detail{
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+    display:flex;
+    justify-content: space-between;
+    border-top: 1px dashed var(--line);
+    padding-top: 10px;
+  }
+  .result .detail div{ text-align:center; flex:1; }
+  .result .detail b{ display:block; color: var(--text); font-size:14.5px; margin-top:2px; }
+
+  .warn{
+    font-size: 12px;
+    color: var(--danger);
+    text-align:center;
+    margin-top: 10px;
+    min-height: 16px;
+  }
+
+  .footnote{
+    font-size: 12px;
+    color: var(--muted);
+    text-align:center;
+    margin-top: 18px;
+    line-height:1.6;
+  }
+  .footnote b{ color: var(--gold); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">XTIUSD · Risk Tool</div>
+  <h1>Lot Size Calculator</h1>
+  <div class="sub">Enter your risk amount and stop loss distance — the recommended XTIUSD lot size will be calculated instantly.</div>
+
+  <div class="card">
+    <div class="field">
+      <label>Risk Amount (Account Currency)</label>
+      <div class="input-row">
+        <span class="prefix">$</span>
+        <input type="number" id="risk" placeholder="80" value="80" min="0" step="any">
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Entry Price</label>
+        <div class="input-row">
+          <input type="number" id="entry" placeholder="65.00" step="any">
+        </div>
+      </div>
+      <div class="field">
+        <label>Stop Loss Price</label>
+        <div class="input-row">
+          <input type="number" id="sl" placeholder="64.50" step="any">
+        </div>
+      </div>
+    </div>
+    <div class="warn" id="warn"></div>
+  </div>
+
+  <div class="result">
+    <div class="label">Recommended Lot Size</div>
+    <div class="lot" id="lotOut">0.00 <span>lot</span></div>
+    <div class="detail">
+      <div>SL Distance<b id="slDist">$0.00</b></div>
+      <div>$ per 0.01 lot<b id="perUnit">$0.00</b></div>
+      <div>Actual Risk<b id="actualRisk">$0.00</b></div>
+    </div>
+  </div>
+
+  <div class="footnote">Formula: <b>Lot = Risk ÷ (SL Distance × Contract Size)</b> — always verify the contract specification in your broker's MT5 symbol settings.</div>
+</div>
+
+<script>
+  // XTIUSD broker specification used for this calculator:
+  // 1.00 lot = 1000 barrels; $1.00 price move = $1000 per 1.00 lot.
+  const CONTRACT_SIZE = 1000;
+
+  const riskEl = document.getElementById('risk');
+  const entryEl = document.getElementById('entry');
+  const slEl = document.getElementById('sl');
+  const lotOut = document.getElementById('lotOut');
+  const slDist = document.getElementById('slDist');
+  const perUnit = document.getElementById('perUnit');
+  const actualRisk = document.getElementById('actualRisk');
+  const warn = document.getElementById('warn');
+
+  function calc(){
+    const risk = parseFloat(riskEl.value) || 0;
+    const entry = parseFloat(entryEl.value) || 0;
+    const sl = parseFloat(slEl.value) || 0;
+
+    warn.textContent = '';
+
+    if(!entry || !sl){
+      lotOut.innerHTML = '0.00 <span>lot</span>';
+      slDist.textContent = '$0.00';
+      perUnit.textContent = '$0.00';
+      actualRisk.textContent = '$0.00';
+      return;
+    }
+
+    const dist = Math.abs(entry - sl);
+    if(dist === 0){
+      warn.textContent = 'Entry and Stop Loss must be different';
+      return;
+    }
+
+    const dollarPerLot = dist * CONTRACT_SIZE;
+    let lot = risk / dollarPerLot;
+    lot = Math.round(lot * 100) / 100;
+
+    if(lot < 0.01 && risk > 0){
+      warn.textContent = 'Required lot is below 0.01 — minimum set to 0.01';
+      lot = 0.01;
+    }
+
+    lotOut.innerHTML = lot.toFixed(2) + ' <span>lot</span>';
+    slDist.textContent = '$' + dist.toFixed(2);
+    perUnit.textContent = '$' + (dist * CONTRACT_SIZE * 0.01).toFixed(2);
+    actualRisk.textContent = '$' + (lot * dollarPerLot).toFixed(2);
+  }
+
+  [riskEl, entryEl, slEl].forEach(el => el.addEventListener('input', calc));
+  calc();
+</script>
+</body>
+</html>
