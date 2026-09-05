@@ -19,7 +19,7 @@
   <div class="card">
     <div class="field">
       <label>Risk Amount (Account Currency)</label>
-      <div class="input-row"><span class="prefix">$</span><input type="number" id="risk" placeholder="20" value="20" min="0" step="any"></div>
+      <div class="input-row"><span class="prefix">$</span><input type="number" id="risk" placeholder="20" min="0" step="any"></div>
     </div>
     <div class="row2">
       <div class="field"><label>Entry Price</label><div class="input-row"><input type="number" id="entry" placeholder="91.00" step="any"></div></div>
@@ -35,7 +35,7 @@
 </div>
 <script>
 const CONTRACT_SIZE=1000,riskEl=document.getElementById('risk'),entryEl=document.getElementById('entry'),slEl=document.getElementById('sl'),lotOut=document.getElementById('lotOut'),slDist=document.getElementById('slDist'),perUnit=document.getElementById('perUnit'),actualRisk=document.getElementById('actualRisk'),warn=document.getElementById('warn');
-function calc(){const risk=parseFloat(riskEl.value)||0,entry=parseFloat(entryEl.value)||0,sl=parseFloat(slEl.value)||0;warn.textContent='';if(!entry||!sl){lotOut.innerHTML='0.00 <span>lot</span>';slDist.textContent='$0.00';perUnit.textContent='$0.00';actualRisk.textContent='$0.00';return}const dist=Math.abs(entry-sl);if(dist===0){warn.textContent='Entry and Stop Loss must be different';return}const dollarPerLot=dist*CONTRACT_SIZE;let lot=Math.round((risk/dollarPerLot)*100)/100;if(lot<.01&&risk>0){warn.textContent='Required lot is below 0.01 — minimum set to 0.01';lot=.01}lotOut.innerHTML=lot.toFixed(2)+' <span>lot</span>';slDist.textContent='$'+dist.toFixed(2);perUnit.textContent='$'+(dist*CONTRACT_SIZE*.01).toFixed(2);actualRisk.textContent='$'+(lot*dollarPerLot).toFixed(2)}
+function calc(){const risk=parseFloat(riskEl.value)||0,entry=parseFloat(entryEl.value)||0,sl=parseFloat(slEl.value)||0;warn.textContent='';if(!risk||!entry||!sl){lotOut.innerHTML='0.00 <span>lot</span>';slDist.textContent='$0.00';perUnit.textContent='$0.00';actualRisk.textContent='$0.00';return}const dist=Math.abs(entry-sl);if(dist===0){warn.textContent='Entry and Stop Loss must be different';return}const dollarPerLot=dist*CONTRACT_SIZE;let lot=Math.round((risk/dollarPerLot)*100)/100;if(lot<.01){warn.textContent='Required lot is below 0.01 — minimum set to 0.01';lot=.01}lotOut.innerHTML=lot.toFixed(2)+' <span>lot</span>';slDist.textContent='$'+dist.toFixed(2);perUnit.textContent='$'+(dist*CONTRACT_SIZE*.01).toFixed(2);actualRisk.textContent='$'+(lot*dollarPerLot).toFixed(2)}
 [riskEl,entryEl,slEl].forEach(el=>el.addEventListener('input',calc));calc();
 </script>
 </body>
