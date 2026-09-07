@@ -31,10 +31,12 @@
     <div class="label">Recommended Lot Size</div><div class="lot" id="lotOut">0.00 <span>lot</span></div>
     <div class="detail"><div>SL Distance<b id="slDist">$0.00</b></div><div>$ per 0.01 lot<b id="perUnit">$0.00</b></div><div>Actual Risk<b id="actualRisk">$0.00</b></div></div>
   </div>
-  <div class="footnote">Formula: <b>Lot = Risk ÷ (SL Distance × Contract Size)</b> — always verify the contract specification in your broker's MT5 symbol settings.</div>
+  <div class="footnote">Formula: <b>Lot = Risk ÷ (SL Distance × Contract Size)</b> — XTIUSD uses a 100-barrel contract size here (0.01 lot = 1 barrel).</div>
 </div>
 <script>
-const CONTRACT_SIZE=1000,riskEl=document.getElementById('risk'),entryEl=document.getElementById('entry'),slEl=document.getElementById('sl'),lotOut=document.getElementById('lotOut'),slDist=document.getElementById('slDist'),perUnit=document.getElementById('perUnit'),actualRisk=document.getElementById('actualRisk'),warn=document.getElementById('warn');
+// XTIUSD: 1.00 lot = 100 barrels; therefore 0.01 lot = 1 barrel.
+const CONTRACT_SIZE=100;
+const riskEl=document.getElementById('risk'),entryEl=document.getElementById('entry'),slEl=document.getElementById('sl'),lotOut=document.getElementById('lotOut'),slDist=document.getElementById('slDist'),perUnit=document.getElementById('perUnit'),actualRisk=document.getElementById('actualRisk'),warn=document.getElementById('warn');
 function calc(){const risk=parseFloat(riskEl.value)||0,entry=parseFloat(entryEl.value)||0,sl=parseFloat(slEl.value)||0;warn.textContent='';if(!risk||!entry||!sl){lotOut.innerHTML='0.00 <span>lot</span>';slDist.textContent='$0.00';perUnit.textContent='$0.00';actualRisk.textContent='$0.00';return}const dist=Math.abs(entry-sl);if(dist===0){warn.textContent='Entry and Stop Loss must be different';return}const dollarPerLot=dist*CONTRACT_SIZE;let lot=Math.round((risk/dollarPerLot)*100)/100;if(lot<.01){warn.textContent='Required lot is below 0.01 — minimum set to 0.01';lot=.01}lotOut.innerHTML=lot.toFixed(2)+' <span>lot</span>';slDist.textContent='$'+dist.toFixed(2);perUnit.textContent='$'+(dist*CONTRACT_SIZE*.01).toFixed(2);actualRisk.textContent='$'+(lot*dollarPerLot).toFixed(2)}
 [riskEl,entryEl,slEl].forEach(el=>el.addEventListener('input',calc));calc();
 </script>
