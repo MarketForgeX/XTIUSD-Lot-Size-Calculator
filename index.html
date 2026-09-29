@@ -84,8 +84,8 @@ function rolloverMultipliers(startText,endText,other,fri){
 }
 function calc(){
   const risk=read('risk'),entry=read('entry'),sl=read('sl'),contract=CONTRACT_SIZE,digits=DIGITS,commissionPct=COMMISSION_PCT/100;
-  const rate= $('direction').value==='buy'?read('swapLong'):read('swapShort');
-  const other=read('otherMult'),fri=read('friMult'),start=$('entryDate').value,end=$('exitDate').value;
+  const rate=$('direction').value==='buy'?SWAP_LONG:SWAP_SHORT;
+  const other=OTHER_MULTIPLIER,fri=FRIDAY_MULTIPLIER,start=$('entryDate').value,end=$('exitDate').value;
   const warn=$('warn');warn.textContent='';
   $('lotOut').innerHTML='— <small>lot</small>';$('lotNote').textContent='Enter trade details and dates';
   ['priceLoss','swapCost','commissionCost','totalLoss'].forEach(id=>$(id).textContent='$—');
