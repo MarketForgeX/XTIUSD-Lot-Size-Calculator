@@ -54,9 +54,3 @@ These are the values currently configured in the calculator.
 ## Rollover date logic
 
 The rollover estimate counts weekdays from the entry date (inclusive) up to, but not including, the expected exit date. Saturday and Sunday are skipped, and the Friday 10× multiplier is applied to Friday rollovers.
-
-## Open the calculator
-
-<p align="center">
-  <a href="https://MarketForgeX.github.io/XTIUSD-Lot-Size-Calculator/" target="_blank" rel="noopener noreferrer">🚀 <strong>Open XTIUSD Lot Size & Swap Calculator in a new tab ↗</strong></a>
-</p>
