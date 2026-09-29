@@ -7,71 +7,67 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 :root{--bg:#0e0e10;--panel:#17171a;--panel2:#1f1f23;--gold:#c9a24b;--gold2:#e8c877;--text:#ede9e0;--muted:#9a999f;--danger:#e17870;--green:#8bc9a2;--line:#303035}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);background-image:radial-gradient(circle at 15% 10%,rgba(201,162,75,.07),transparent 40%),radial-gradient(circle at 85% 90%,rgba(201,162,75,.05),transparent 40%);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:28px 14px 48px}
-.wrap{width:100%;max-width:520px}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:700}h1{font-family:Spectral,serif;font-size:28px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;line-height:1.55;margin-bottom:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}.section-title{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 16px}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}.input-row{display:flex;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:0 10px}.input-row:focus-within{border-color:var(--gold)}input,select{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:15px Inter,sans-serif;padding:11px 0}input::placeholder{color:#77767d}select option{background:var(--panel);color:var(--text)}.prefix{color:var(--muted);margin-right:6px;font-size:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.result{background:linear-gradient(160deg,#211d11,#17171a 65%);border:1px solid rgba(201,162,75,.4);border-radius:14px;padding:20px;margin-bottom:14px;text-align:center}.result-label{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700}.lot{font:700 44px Spectral,serif;color:var(--gold2);line-height:1.25}.lot small{font:500 17px Inter,sans-serif;color:var(--muted)}.result-sub{font-size:12px;color:var(--muted);margin-top:3px}.breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px;text-align:left}.metric{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:9px;padding:11px}.metric span{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.metric b{font-size:17px;font-weight:700}.total{border-color:rgba(201,162,75,.4)}.total b{color:var(--gold2)}.negative{color:var(--danger)}.positive{color:var(--green)}.warn{font-size:12px;line-height:1.5;color:var(--danger);min-height:0;margin-top:10px}.notice{font-size:11.5px;line-height:1.6;color:var(--muted);margin-top:10px}.notice strong{color:var(--text)}details summary{cursor:pointer;color:var(--text);font-size:13px;font-weight:600}details .settings{margin-top:16px}.foot{font-size:11px;line-height:1.6;text-align:center;color:var(--muted);margin-top:17px}@media(max-width:380px){.grid3{grid-template-columns:1fr 1fr}.card{padding:15px}.lot{font-size:38px}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);background-image:radial-gradient(circle at 15% 10%,rgba(201,162,75,.07),transparent 40%),radial-gradient(circle at 85% 90%,rgba(201,162,75,.05),transparent 40%);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;padding:18px 22px 20px}
+.wrap{width:100%;max-width:1240px;margin:0 auto}.header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:15px}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;font-weight:700}h1{font-family:Spectral,serif;font-size:27px;line-height:1.1;margin:0 0 4px}.sub{color:var(--muted);font-size:12px;line-height:1.45;max-width:720px}.broker-tag{flex-shrink:0;border:1px solid rgba(201,162,75,.45);background:rgba(201,162,75,.08);border-radius:9px;padding:10px 13px;color:var(--gold2);font-size:12px;font-weight:700;white-space:nowrap}
+.workspace{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);gap:15px;align-items:stretch}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px}.section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 13px}.field{margin-bottom:11px}.field:last-child{margin-bottom:0}label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600}.input-row{display:flex;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:0 9px;min-height:39px}.input-row:focus-within{border-color:var(--gold)}input,select{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:14px Inter,sans-serif;padding:9px 0}input::placeholder{color:#77767d}select option{background:var(--panel);color:var(--text)}.prefix{color:var(--muted);margin-right:6px;font-size:13px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.date-note{font-size:10.5px;line-height:1.45;color:var(--muted);margin-top:1px}.result{background:linear-gradient(160deg,#211d11,#17171a 65%);border:1px solid rgba(201,162,75,.4);border-radius:13px;padding:18px;margin-bottom:12px;text-align:center}.result-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}.lot{font:700 42px Spectral,serif;color:var(--gold2);line-height:1.15;margin-top:3px}.lot small{font:500 16px Inter,sans-serif;color:var(--muted)}.result-sub{font-size:11px;color:var(--muted);margin-top:4px}.breakdown{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;text-align:left}.metric{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:9px;padding:11px}.metric span{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px}.metric b{font-size:16px;font-weight:700}.total{border-color:rgba(201,162,75,.4)}.total b{color:var(--gold2)}.negative{color:var(--danger)}.positive{color:var(--green)}.warn{font-size:11px;line-height:1.45;color:var(--danger);margin-top:9px}.summary-card{margin-top:12px}.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.summary-line{border-bottom:1px solid var(--line);padding:8px 0;display:flex;justify-content:space-between;gap:10px;font-size:11px}.summary-line span{color:var(--muted)}.summary-line b{font-weight:600;text-align:right}.foot{font-size:10px;line-height:1.5;text-align:center;color:var(--muted);margin-top:12px}
+@media(min-width:1000px) and (min-height:700px){body{padding-top:14px;padding-bottom:12px}.header{margin-bottom:10px}.card{padding:14px}.field{margin-bottom:8px}.input-row{min-height:35px}input,select{padding:7px 0}.result{padding:14px;margin-bottom:9px}.lot{font-size:38px}.metric{padding:9px}.summary-card{margin-top:9px}.foot{margin-top:8px}}
+@media(max-width:800px){body{padding:18px 12px}.header{align-items:flex-start;flex-direction:column}.broker-tag{white-space:normal}.workspace{grid-template-columns:1fr}.summary-card{margin-top:12px}}
+@media(max-width:420px){.card{padding:14px}.grid2{gap:8px}.lot{font-size:37px}.metric b{font-size:15px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">XTIUSD · Risk Management</div>
-  <h1>Lot Size & Swap Calculator</h1>
-  <div class="sub">Estimate position size and the total loss if Stop Loss is hit, including estimated overnight swap and round-trip commission.</div>
-
-  <div class="card">
-    <div class="section-title">Trade setup</div>
-    <div class="field"><label for="risk">Maximum total risk ($)</label><div class="input-row"><span class="prefix">$</span><input id="risk" type="number" min="0" step="any" placeholder="100"></div></div>
-    <div class="grid2">
-      <div class="field"><label for="direction">Direction</label><div class="input-row"><select id="direction"><option value="sell">Sell / Short</option><option value="buy">Buy / Long</option></select></div></div>
-      <div class="field"><label for="entry">Entry price</label><div class="input-row"><input id="entry" type="number" min="0" step="any" placeholder="97.37"></div></div>
+  <header class="header">
+    <div>
+      <div class="eyebrow">Risk Management · Energy CFD</div>
+      <h1>XTIUSD Lot Size & Swap Calculator</h1>
+      <div class="sub">Estimate position size and total loss at Stop Loss, including estimated overnight swap and commission.</div>
     </div>
-    <div class="field"><label for="sl">Stop Loss price</label><div class="input-row"><input id="sl" type="number" min="0" step="any" placeholder="98.00"></div></div>
-    <div class="grid2">
-      <div class="field"><label for="entryDate">Entry date (broker calendar)</label><div class="input-row"><input id="entryDate" type="date"></div></div>
-      <div class="field"><label for="exitDate">Expected exit date</label><div class="input-row"><input id="exitDate" type="date"></div></div>
-    </div>
-    <div class="notice">Rollover estimate assumes the position is open before the rollover on the entry date and is closed before rollover on the exit date. Broker-server rollover timing may change the actual count.</div>
-    <div class="warn" id="warn" role="status"></div>
-  </div>
-
-  <div class="result">
-    <div class="result-label">Risk-adjusted recommended lot size</div>
-    <div class="lot" id="lotOut">— <small>lot</small></div>
-    <div class="result-sub" id="lotNote">Enter trade details and dates</div>
-    <div class="breakdown">
-      <div class="metric"><span>Price loss at SL</span><b id="priceLoss">$—</b></div>
-      <div class="metric"><span>Estimated swap</span><b id="swapCost">$—</b></div>
-      <div class="metric"><span>Estimated commission</span><b id="commissionCost">$—</b></div>
-      <div class="metric total"><span>Final SL · total loss</span><b id="totalLoss">$—</b></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <details>
-      <summary>Broker settings · The 5ers XTIUSD values you provided</summary>
-      <div class="settings">
-        <div class="grid3">
-          <div class="field"><label for="contract">Contract size</label><div class="input-row"><input id="contract" type="number" min="0.01" step="any" value="100"></div></div>
-          <div class="field"><label for="digits">Digits</label><div class="input-row"><input id="digits" type="number" min="0" max="8" step="1" value="2"></div></div>
-          <div class="field"><label for="commissionPct">Commission % / side</label><div class="input-row"><input id="commissionPct" type="number" min="0" step="any" value="0.03"></div></div>
-        </div>
-        <div class="grid2">
-          <div class="field"><label for="swapLong">Swap Long (points)</label><div class="input-row"><input id="swapLong" type="number" step="any" value="-70"></div></div>
-          <div class="field"><label for="swapShort">Swap Short (points)</label><div class="input-row"><input id="swapShort" type="number" step="any" value="-40"></div></div>
-        </div>
-        <div class="grid2">
-          <div class="field"><label for="friMult">Friday multiplier</label><div class="input-row"><input id="friMult" type="number" min="0" step="any" value="10"></div></div>
-          <div class="field"><label for="otherMult">Mon–Thu multiplier</label><div class="input-row"><input id="otherMult" type="number" min="0" step="any" value="1"></div></div>
-        </div>
-        <div class="notice">The calculator uses point size = 10<sup>−digits</sup> and estimates point value as contract size × point size in USD per lot. Your screenshots showed Tick Size 0.00 and Tick Value 0, so confirm this estimate against a closed trade before relying on it.</div>
+    <div class="broker-tag">CONFIGURED FOR THE5ERS · XTIUSD</div>
+  </header>
+  <div class="workspace">
+    <section class="card">
+      <div class="section-title">Trade setup</div>
+      <div class="field"><label for="risk">Maximum total risk ($)</label><div class="input-row"><span class="prefix">$</span><input id="risk" type="number" min="0" step="any" placeholder="100"></div></div>
+      <div class="grid2">
+        <div class="field"><label for="direction">Direction</label><div class="input-row"><select id="direction"><option value="sell">Sell / Short</option><option value="buy">Buy / Long</option></select></div></div>
+        <div class="field"><label for="entry">Entry price</label><div class="input-row"><input id="entry" type="number" min="0" step="any" placeholder="97.37"></div></div>
       </div>
-    </details>
+      <div class="field"><label for="sl">Stop Loss price</label><div class="input-row"><input id="sl" type="number" min="0" step="any" placeholder="98.00"></div></div>
+      <div class="grid2">
+        <div class="field"><label for="entryDate">Entry date (broker calendar)</label><div class="input-row"><input id="entryDate" type="date"></div></div>
+        <div class="field"><label for="exitDate">Expected exit date</label><div class="input-row"><input id="exitDate" type="date"></div></div>
+      </div>
+      <div class="date-note">Rollover estimate assumes the trade is open before rollover on entry date and closed before rollover on exit date. Broker-server timing may change the actual count.</div>
+      <div class="warn" id="warn" role="status"></div>
+    </section>
+    <section>
+      <div class="result">
+        <div class="result-label">Risk-adjusted recommended lot size</div>
+        <div class="lot" id="lotOut">— <small>lot</small></div>
+        <div class="result-sub" id="lotNote">Enter trade details and dates</div>
+        <div class="breakdown">
+          <div class="metric"><span>Price loss at SL</span><b id="priceLoss">$—</b></div>
+          <div class="metric"><span>Estimated swap</span><b id="swapCost">$—</b></div>
+          <div class="metric"><span>Estimated commission</span><b id="commissionCost">$—</b></div>
+          <div class="metric total"><span>Final SL · total loss</span><b id="totalLoss">$—</b></div>
+        </div>
+      </div>
+      <div class="card summary-card">
+        <div class="section-title">The5ers XTIUSD settings applied</div>
+        <div class="summary-grid">
+          <div class="summary-line"><span>Contract size</span><b>100</b></div>
+          <div class="summary-line"><span>Swap · Buy / Sell</span><b>−70 / −40 points</b></div>
+          <div class="summary-line"><span>Swap multiplier</span><b>Mon–Thu 1× · Fri 10×</b></div>
+          <div class="summary-line"><span>Commission setting</span><b>0.03% per side</b></div>
+        </div>
+      </div>
+    </section>
   </div>
-
-  <div class="foot">Estimates only. Actual swap, commission, execution price and risk can differ because of broker rollover timing, contract settings, slippage and changing charges. This calculator does not connect to MT5 or The5ers live data.</div>
-</div>
-<script>
+  <div class="foot">Estimates only. Actual swap, commission, execution price and risk may differ due to broker rollover timing, contract settings and slippage. This calculator does not connect to MT5 or The5ers live data.</div>
+</div><script>
 const $=id=>document.getElementById(id);
-const inputs=['risk','direction','entry','sl','entryDate','exitDate','contract','digits','commissionPct','swapLong','swapShort','friMult','otherMult'].map($);
+const inputs=['risk','direction','entry','sl','entryDate','exitDate'].map($);\nconst CONTRACT_SIZE=100, DIGITS=2, COMMISSION_PCT=0.03, SWAP_LONG=-70, SWAP_SHORT=-40, FRIDAY_MULTIPLIER=10, OTHER_MULTIPLIER=1;
 const money=n=>Number.isFinite(n)?(n<0?'-$'+Math.abs(n).toFixed(2):'$'+n.toFixed(2)):'$—';
 const read=id=>Number.parseFloat($(id).value);
 function rolloverMultipliers(startText,endText,other,fri){
@@ -86,13 +82,13 @@ function rolloverMultipliers(startText,endText,other,fri){
   return items;
 }
 function calc(){
-  const risk=read('risk'),entry=read('entry'),sl=read('sl'),contract=read('contract'),digits=read('digits'),commissionPct=read('commissionPct')/100;
+  const risk=read('risk'),entry=read('entry'),sl=read('sl'),contract=CONTRACT_SIZE,digits=DIGITS,commissionPct=COMMISSION_PCT/100;
   const rate= $('direction').value==='buy'?read('swapLong'):read('swapShort');
   const other=read('otherMult'),fri=read('friMult'),start=$('entryDate').value,end=$('exitDate').value;
   const warn=$('warn');warn.textContent='';
   $('lotOut').innerHTML='— <small>lot</small>';$('lotNote').textContent='Enter trade details and dates';
   ['priceLoss','swapCost','commissionCost','totalLoss'].forEach(id=>$(id).textContent='$—');
-  if(!(risk>0)||!(entry>0)||!(sl>0)||!(contract>0)||!Number.isFinite(digits)||digits<0||digits>8||commissionPct<0||!Number.isFinite(rate)||!Number.isFinite(other)||!Number.isFinite(fri)){return}
+  if(!(risk>0)||!(entry>0)||!(sl>0)){return}
   const isBuy=$('direction').value==='buy';
   if((isBuy&&sl>=entry)||(!isBuy&&sl<=entry)){warn.textContent='Stop Loss must be below Entry for a Buy, and above Entry for a Sell.';return}
   const rolls=rolloverMultipliers(start,end,other,fri);
