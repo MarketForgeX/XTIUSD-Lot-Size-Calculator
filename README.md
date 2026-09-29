@@ -1,5 +1,9 @@
 # XTIUSD-Lot-Size-Calculator
 
+<p align="center">
+  <img src="assets/calculator-preview.webp" alt="XTIUSD Lot Size and Swap Calculator preview" width="100%" />
+</p>
+
 XTIUSD Lot Size Calculator that helps traders calculate the appropriate lot size based on risk amount and stop loss distance. Built for quick, accurate, and easy risk management with no installation required.
 
 <p align="center">
