@@ -66,54 +66,100 @@
   </div>
   <div class="foot">Estimates only. Actual swap, commission, execution price and risk may differ due to broker rollover timing, contract settings and slippage. This calculator does not connect to MT5 or The5ers live data.</div>
 </div><script>
-const $=id=>document.getElementById(id);
-const inputs=['risk','direction','entry','sl','entryDate','exitDate'].map($);
-const CONTRACT_SIZE=100, DIGITS=2, COMMISSION_PCT=0.03, SWAP_LONG=-70, SWAP_SHORT=-40, FRIDAY_MULTIPLIER=10, OTHER_MULTIPLIER=1;
-const money=n=>Number.isFinite(n)?(n<0?'-$'+Math.abs(n).toFixed(2):'$'+n.toFixed(2)):'$—';
-const read=id=>Number.parseFloat($(id).value);
-function rolloverMultipliers(startText,endText,other,fri){
-  if(!startText||!endText)return null;
-  const start=new Date(startText+'T00:00:00Z'),end=new Date(endText+'T00:00:00Z');
-  if(Number.isNaN(start.getTime())||Number.isNaN(end.getTime())||end<start)return null;
-  const items=[];
-  for(const d=new Date(start);d<end;d.setUTCDate(d.getUTCDate()+1)){
-    const day=d.getUTCDay();
-    if(day!==0&&day!==6)items.push({date:d.toISOString().slice(0,10),day,multiplier:day===5?fri:other});
+(function () {
+  'use strict';
+  const CONTRACT_SIZE = 100;
+  const DIGITS = 2;
+  const COMMISSION_PCT = 0.03;
+  const SWAP_LONG = -70;
+  const SWAP_SHORT = -40;
+  const FRIDAY_MULTIPLIER = 10;
+  const OTHER_MULTIPLIER = 1;
+  function el(id) { return document.getElementById(id); }
+  function read(id) { return Number.parseFloat(el(id).value); }
+  function money(n) {
+    if (!Number.isFinite(n)) return '$—';
+    return n < 0 ? '-$' + Math.abs(n).toFixed(2) : '$' + n.toFixed(2);
   }
-  return items;
-}
-function calc(){
-  const risk=read('risk'),entry=read('entry'),sl=read('sl'),contract=CONTRACT_SIZE,digits=DIGITS,commissionPct=COMMISSION_PCT/100;
-  const rate=$('direction').value==='buy'?SWAP_LONG:SWAP_SHORT;
-  const other=OTHER_MULTIPLIER,fri=FRIDAY_MULTIPLIER,start=$('entryDate').value,end=$('exitDate').value;
-  const warn=$('warn');warn.textContent='';
-  $('lotOut').innerHTML='— <small>lot</small>';$('lotNote').textContent='Enter trade details and dates';
-  ['priceLoss','swapCost','commissionCost','totalLoss'].forEach(id=>$(id).textContent='$—');
-  if(!(risk>0)||!(entry>0)||!(sl>0)){return}
-  const isBuy=$('direction').value==='buy';
-  if((isBuy&&sl>=entry)||(!isBuy&&sl<=entry)){warn.textContent='Stop Loss must be below Entry for a Buy, and above Entry for a Sell.';return}
-  const rolls=rolloverMultipliers(start,end,other,fri);
-  if(!rolls){warn.textContent='Select valid entry and exit dates. Exit date must be the same day or later than entry date.';return}
-  const point=Math.pow(10,-digits),pointValuePerLot=contract*point;
-  const swapPerLot=rolls.reduce((sum,r)=>sum+Math.abs(rate)*Math.max(0,r.multiplier)*pointValuePerLot,0);
-  const distance=Math.abs(entry-sl),priceLossPerLot=distance*contract;
-  const commissionPerLot=(entry+sl)*contract*commissionPct;
-  const allInPerLot=priceLossPerLot+swapPerLot+commissionPerLot;
-  if(!(allInPerLot>0)){warn.textContent='Check the trade and broker settings.';return}
-  const rawLots=risk/allInPerLot;
-  const lots=Math.floor((rawLots+1e-10)/0.01)*0.01;
-  const shownLots=lots>=0.01?lots:0.01;
-  const priceLoss=shownLots*priceLossPerLot,swap=shownLots*swapPerLot,commission=shownLots*commissionPerLot,total=priceLoss+swap+commission;
-  $('lotOut').innerHTML=shownLots.toFixed(2)+' <small>lot</small>';
-  $('lotNote').textContent=rolls.length+' estimated rollover(s) · '+(lots<0.01?'minimum lot used for display; exceeds risk budget':'lot size rounded down to 0.01');
-  $('priceLoss').textContent=money(priceLoss);$('swapCost').textContent=money(swap);$('commissionCost').textContent=money(commission);$('totalLoss').textContent=money(total);
-  $('totalLoss').className=total>risk+0.005?'negative':'positive';
-  if(lots<0.01)warn.textContent='Calculated lot is below the broker minimum of 0.01. Displayed 0.01 lot would risk '+money(total)+', above your '+money(risk)+' limit.';
-  else if(total>risk+0.005)warn.textContent='Estimated total loss exceeds your risk limit. Reduce lot size or adjust the setup.';
-  if(rolls.some(r=>r.day===5&&r.multiplier!==1))warn.textContent+=(warn.textContent?' ':'')+'Friday multiplier applied on '+rolls.filter(r=>r.day===5).map(r=>r.date).join(', ')+'.';
-}
-inputs.forEach(el=>el.addEventListener('input',calc));
-calc();
+  function rollovers(startText, endText) {
+    if (!startText || !endText) return null;
+    const start = new Date(startText + 'T00:00:00Z');
+    const end = new Date(endText + 'T00:00:00Z');
+    if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime()) || end < start) return null;
+    const rows = [];
+    for (const d = new Date(start); d < end; d.setUTCDate(d.getUTCDate() + 1)) {
+      const day = d.getUTCDay();
+      if (day !== 0 && day !== 6) rows.push({date:d.toISOString().slice(0,10), day:day, multiplier:day === 5 ? FRIDAY_MULTIPLIER : OTHER_MULTIPLIER});
+    }
+    return rows;
+  }
+  function calc() {
+    const risk = read('risk');
+    const entry = read('entry');
+    const sl = read('sl');
+    const isBuy = el('direction').value === 'buy';
+    const warn = el('warn');
+    warn.textContent = '';
+    el('lotOut').innerHTML = '— <small>lot</small>';
+    el('lotNote').textContent = 'Enter trade details and dates';
+    ['priceLoss','swapCost','commissionCost','totalLoss'].forEach(function(id) {
+      el(id).textContent = '$—';
+      el(id).className = '';
+    });
+    if (!(risk > 0) || !(entry > 0) || !(sl > 0)) return;
+    if ((isBuy && sl >= entry) || (!isBuy && sl <= entry)) {
+      warn.textContent = 'Stop Loss must be below Entry for a Buy, and above Entry for a Sell.';
+      return;
+    }
+    const rows = rollovers(el('entryDate').value, el('exitDate').value);
+    if (!rows) {
+      warn.textContent = 'Select valid entry and exit dates. Exit date must be the same day or later than entry date.';
+      return;
+    }
+    const rate = isBuy ? SWAP_LONG : SWAP_SHORT;
+    const pointValuePerLot = CONTRACT_SIZE * Math.pow(10, -DIGITS);
+    const swapPerLot = rows.reduce(function(sum, row) {
+      return sum + Math.abs(rate) * row.multiplier * pointValuePerLot;
+    }, 0);
+    const priceLossPerLot = Math.abs(entry - sl) * CONTRACT_SIZE;
+    const commissionPerLot = (entry + sl) * CONTRACT_SIZE * (COMMISSION_PCT / 100);
+    const allInPerLot = priceLossPerLot + swapPerLot + commissionPerLot;
+    if (!(allInPerLot > 0) || !Number.isFinite(allInPerLot)) {
+      warn.textContent = 'Please check the entered values.';
+      return;
+    }
+    const rawLots = risk / allInPerLot;
+    const lots = Math.floor((rawLots + 1e-10) / 0.01) * 0.01;
+    const shownLots = Math.max(0.01, lots);
+    const priceLoss = shownLots * priceLossPerLot;
+    const swap = shownLots * swapPerLot;
+    const commission = shownLots * commissionPerLot;
+    const total = priceLoss + swap + commission;
+    el('lotOut').innerHTML = shownLots.toFixed(2) + ' <small>lot</small>';
+    el('lotNote').textContent = rows.length + ' estimated rollover(s) · ' + (lots < 0.01 ? 'minimum lot shown; exceeds risk budget' : 'lot size rounded down to 0.01');
+    el('priceLoss').textContent = money(priceLoss);
+    el('swapCost').textContent = money(swap);
+    el('commissionCost').textContent = money(commission);
+    el('totalLoss').textContent = money(total);
+    el('totalLoss').className = total > risk + 0.005 ? 'negative' : 'positive';
+    if (lots < 0.01) warn.textContent = 'Calculated lot is below the broker minimum of 0.01. Displayed 0.01 lot would risk ' + money(total) + ', above your ' + money(risk) + ' limit.';
+    else if (total > risk + 0.005) warn.textContent = 'Estimated total loss exceeds your risk limit. Reduce lot size or adjust the setup.';
+    const fridays = rows.filter(function(row) { return row.day === 5; });
+    if (fridays.length) warn.textContent += (warn.textContent ? ' ' : '') + 'Friday 10× multiplier applied on ' + fridays.map(function(row) { return row.date; }).join(', ') + '.';
+  }
+  function init() {
+    ['risk','direction','entry','sl','entryDate','exitDate'].forEach(function(id) {
+      const field = el(id);
+      if (field) {
+        field.addEventListener('input', calc);
+        field.addEventListener('change', calc);
+      }
+    });
+    calc();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
 </script>
 </body>
 </html>
