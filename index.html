@@ -67,7 +67,8 @@
   <div class="foot">Estimates only. Actual swap, commission, execution price and risk may differ due to broker rollover timing, contract settings and slippage. This calculator does not connect to MT5 or The5ers live data.</div>
 </div><script>
 const $=id=>document.getElementById(id);
-const inputs=['risk','direction','entry','sl','entryDate','exitDate'].map($);\nconst CONTRACT_SIZE=100, DIGITS=2, COMMISSION_PCT=0.03, SWAP_LONG=-70, SWAP_SHORT=-40, FRIDAY_MULTIPLIER=10, OTHER_MULTIPLIER=1;
+const inputs=['risk','direction','entry','sl','entryDate','exitDate'].map($);
+const CONTRACT_SIZE=100, DIGITS=2, COMMISSION_PCT=0.03, SWAP_LONG=-70, SWAP_SHORT=-40, FRIDAY_MULTIPLIER=10, OTHER_MULTIPLIER=1;
 const money=n=>Number.isFinite(n)?(n<0?'-$'+Math.abs(n).toFixed(2):'$'+n.toFixed(2)):'$—';
 const read=id=>Number.parseFloat($(id).value);
 function rolloverMultipliers(startText,endText,other,fri){
