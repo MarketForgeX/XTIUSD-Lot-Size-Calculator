@@ -3,42 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XTIUSD Lot Size Calculator</title>
+<title>XTIUSD Lot Size & Swap Calculator</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
-  :root{--bg:#0e0e10;--panel:#17171a;--panel-2:#1f1f23;--gold:#c9a24b;--gold-bright:#e8c877;--text:#ede9e0;--muted:#8a8a8f;--danger:#b5544a;--line:#2a2a2e}
-  *{box-sizing:border-box} body{margin:0;background:var(--bg);background-image:radial-gradient(circle at 15% 10%,rgba(201,162,75,.07),transparent 40%),radial-gradient(circle at 85% 90%,rgba(201,162,75,.05),transparent 40%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:32px 16px 60px}
-  .wrap{width:100%;max-width:460px}.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:600}h1{font-family:'Spectral',serif;font-size:28px;font-weight:700;margin:0 0 4px;color:var(--text)}.sub{color:var(--muted);font-size:13.5px;margin-bottom:24px;line-height:1.5}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px}.field{margin-bottom:16px}.field:last-child{margin-bottom:0}label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px;font-weight:500}.input-row{display:flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:0 12px;transition:border-color .15s}.input-row:focus-within{border-color:var(--gold)}.input-row .prefix{color:var(--muted);font-size:14px;margin-right:6px}input[type=number]{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:16px;font-family:'Inter',sans-serif;padding:11px 0;width:100%}input[type=number]::placeholder{color:var(--muted);opacity:1}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}.row2{display:flex;gap:12px}.row2 .field{flex:1}.result{background:linear-gradient(160deg,#1c1a12,#17171a 60%);border:1px solid rgba(201,162,75,.35);border-radius:14px;padding:20px 22px;text-align:center}.result .label{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600}.result .lot{font-family:'Spectral',serif;font-size:44px;font-weight:700;color:var(--gold-bright);line-height:1;margin-bottom:6px}.result .lot span{font-size:20px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:500}.result .detail{font-size:13px;color:var(--muted);margin-top:10px;display:flex;justify-content:space-between;border-top:1px dashed var(--line);padding-top:10px}.result .detail div{text-align:center;flex:1}.result .detail b{display:block;color:var(--text);font-size:14.5px;margin-top:2px}.warn{font-size:12px;color:var(--danger);text-align:center;margin-top:10px;min-height:16px}.footnote{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-height:1.6}.footnote b{color:var(--gold);font-weight:600}
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+:root{--bg:#0e0e10;--panel:#17171a;--panel2:#1f1f23;--gold:#c9a24b;--gold2:#e8c877;--text:#ede9e0;--muted:#9a999f;--danger:#e17870;--green:#8bc9a2;--line:#303035}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);background-image:radial-gradient(circle at 15% 10%,rgba(201,162,75,.07),transparent 40%),radial-gradient(circle at 85% 90%,rgba(201,162,75,.05),transparent 40%);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;padding:18px 22px 20px}
+.wrap{width:100%;max-width:1240px;margin:0 auto}.header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:15px}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;font-weight:700}h1{font-family:Spectral,serif;font-size:27px;line-height:1.1;margin:0 0 4px}.sub{color:var(--muted);font-size:12px;line-height:1.45;max-width:720px}.broker-tag{flex-shrink:0;border:1px solid rgba(201,162,75,.45);background:rgba(201,162,75,.08);border-radius:9px;padding:10px 13px;color:var(--gold2);font-size:12px;font-weight:700;white-space:nowrap}
+.workspace{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);gap:15px;align-items:stretch}.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px}.section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 13px}.field{margin-bottom:11px}.field:last-child{margin-bottom:0}label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600}.input-row{display:flex;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:0 9px;min-height:39px}.input-row:focus-within{border-color:var(--gold)}input,select{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:14px Inter,sans-serif;padding:9px 0}input::placeholder{color:#77767d}select option{background:var(--panel);color:var(--text)}.prefix{color:var(--muted);margin-right:6px;font-size:13px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.date-note{font-size:10.5px;line-height:1.45;color:var(--muted);margin-top:1px}.result{background:linear-gradient(160deg,#211d11,#17171a 65%);border:1px solid rgba(201,162,75,.4);border-radius:13px;padding:18px;margin-bottom:12px;text-align:center}.result-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}.lot{font:700 42px Spectral,serif;color:var(--gold2);line-height:1.15;margin-top:3px}.lot small{font:500 16px Inter,sans-serif;color:var(--muted)}.result-sub{font-size:11px;color:var(--muted);margin-top:4px}.breakdown{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;text-align:left}.metric{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:9px;padding:11px}.metric span{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px}.metric b{font-size:16px;font-weight:700}.total{border-color:rgba(201,162,75,.4)}.total b{color:var(--gold2)}.negative{color:var(--danger)}.positive{color:var(--green)}.warn{font-size:11px;line-height:1.45;color:var(--danger);margin-top:9px}.summary-card{margin-top:12px}.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.summary-line{border-bottom:1px solid var(--line);padding:8px 0;display:flex;justify-content:space-between;gap:10px;font-size:11px}.summary-line span{color:var(--muted)}.summary-line b{font-weight:600;text-align:right}.foot{font-size:10px;line-height:1.5;text-align:center;color:var(--muted);margin-top:12px}
+@media(min-width:1000px) and (min-height:700px){body{padding:12px 22px}.wrap{max-width:1240px}.header{margin:0 4px 8px}.card{padding:12px}.field{margin-bottom:7px}.section-title{margin-bottom:9px}.input-row{min-height:33px}input,select{padding:6px 0}.workspace{gap:12px}.result{padding:12px;margin-bottom:8px}.lot{font-size:36px}.breakdown{gap:7px;margin-top:10px}.metric{padding:8px}.summary-card{margin-top:8px}.summary-line{padding:6px 0}.foot{margin:7px 8px 0;line-height:1.35}}
+@media(max-width:800px){body{padding:18px 12px}.header{align-items:flex-start;flex-direction:column}.broker-tag{white-space:normal}.workspace{grid-template-columns:1fr}.summary-card{margin-top:12px}}
+@media(max-width:420px){.card{padding:14px}.grid2{gap:8px}.lot{font-size:37px}.metric b{font-size:15px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">XTIUSD · Risk Tool</div>
-  <h1>Lot Size Calculator</h1>
-  <div class="sub">Enter your risk amount and stop loss distance — the recommended XTIUSD lot size will be calculated instantly.</div>
-  <div class="card">
-    <div class="field">
-      <label>Risk Amount (Account Currency)</label>
-      <div class="input-row"><span class="prefix">$</span><input type="number" id="risk" placeholder="20" min="0" step="any"></div>
+  <header class="header">
+    <div>
+      <div class="eyebrow">Risk Management · Energy CFD</div>
+      <h1>XTIUSD Lot Size & Swap Calculator</h1>
+      <div class="sub">Estimate position size and total loss at Stop Loss, including estimated overnight swap and commission.</div>
     </div>
-    <div class="row2">
-      <div class="field"><label>Entry Price</label><div class="input-row"><input type="number" id="entry" placeholder="91.00" step="any"></div></div>
-      <div class="field"><label>Stop Loss Price</label><div class="input-row"><input type="number" id="sl" placeholder="90.00" step="any"></div></div>
-    </div>
-    <div class="warn" id="warn"></div>
+    <div class="broker-tag">CONFIGURED FOR THE5ERS · XTIUSD</div>
+  </header>
+  <div class="workspace">
+    <section class="card">
+      <div class="section-title">Trade setup</div>
+      <div class="field"><label for="risk">Maximum total risk ($)</label><div class="input-row"><span class="prefix">$</span><input id="risk" type="number" min="0" step="any" placeholder="100"></div></div>
+      <div class="grid2">
+        <div class="field"><label for="direction">Direction</label><div class="input-row"><select id="direction"><option value="sell">Sell / Short</option><option value="buy">Buy / Long</option></select></div></div>
+        <div class="field"><label for="entry">Entry price</label><div class="input-row"><input id="entry" type="number" min="0" step="any" placeholder="97.37"></div></div>
+      </div>
+      <div class="field"><label for="sl">Stop Loss price</label><div class="input-row"><input id="sl" type="number" min="0" step="any" placeholder="98.00"></div></div>
+      <div class="grid2">
+        <div class="field"><label for="entryDate">Entry date (broker calendar)</label><div class="input-row"><input id="entryDate" type="date"></div></div>
+        <div class="field"><label for="exitDate">Expected exit date</label><div class="input-row"><input id="exitDate" type="date"></div></div>
+      </div>
+      <div class="date-note">Rollover estimate assumes the trade is open before rollover on entry date and closed before rollover on exit date. Broker-server timing may change the actual count.</div>
+      <div class="warn" id="warn" role="status"></div>
+    </section>
+    <section>
+      <div class="result">
+        <div class="result-label">Risk-adjusted recommended lot size</div>
+        <div class="lot" id="lotOut">— <small>lot</small></div>
+        <div class="result-sub" id="lotNote">Enter trade details and dates</div>
+        <div class="breakdown">
+          <div class="metric"><span>Price loss at SL</span><b id="priceLoss">$—</b></div>
+          <div class="metric"><span>Estimated swap</span><b id="swapCost">$—</b></div>
+          <div class="metric"><span>Estimated commission</span><b id="commissionCost">$—</b></div>
+          <div class="metric total"><span>Final SL · total loss</span><b id="totalLoss">$—</b></div>
+        </div>
+      </div>
+      <div class="card summary-card">
+        <div class="section-title">The5ers XTIUSD settings applied</div>
+        <div class="summary-grid">
+          <div class="summary-line"><span>Contract size</span><b>100</b></div>
+          <div class="summary-line"><span>Swap · Buy / Sell</span><b>−70 / −40 points</b></div>
+          <div class="summary-line"><span>Swap multiplier</span><b>Mon–Thu 1× · Fri 10×</b></div>
+          <div class="summary-line"><span>Commission setting</span><b>0.03% per side</b></div>
+        </div>
+      </div>
+    </section>
   </div>
-  <div class="result">
-    <div class="label">Recommended Lot Size</div><div class="lot" id="lotOut">0.00 <span>lot</span></div>
-    <div class="detail"><div>SL Distance<b id="slDist">$0.00</b></div><div>$ per 0.01 lot<b id="perUnit">$0.00</b></div><div>Actual Risk<b id="actualRisk">$0.00</b></div></div>
-  </div>
-  <div class="footnote">Formula: <b>Lot = Risk ÷ (SL Distance × Contract Size)</b> — XTIUSD uses a 100-barrel contract size here (0.01 lot = 1 barrel).</div>
-</div>
-<script>
-// XTIUSD: 1.00 lot = 100 barrels; therefore 0.01 lot = 1 barrel.
-const CONTRACT_SIZE=100;
-const riskEl=document.getElementById('risk'),entryEl=document.getElementById('entry'),slEl=document.getElementById('sl'),lotOut=document.getElementById('lotOut'),slDist=document.getElementById('slDist'),perUnit=document.getElementById('perUnit'),actualRisk=document.getElementById('actualRisk'),warn=document.getElementById('warn');
-function calc(){const risk=parseFloat(riskEl.value)||0,entry=parseFloat(entryEl.value)||0,sl=parseFloat(slEl.value)||0;warn.textContent='';if(!risk||!entry||!sl){lotOut.innerHTML='0.00 <span>lot</span>';slDist.textContent='$0.00';perUnit.textContent='$0.00';actualRisk.textContent='$0.00';return}const dist=Math.abs(entry-sl);if(dist===0){warn.textContent='Entry and Stop Loss must be different';return}const dollarPerLot=dist*CONTRACT_SIZE;let lot=Math.round((risk/dollarPerLot)*100)/100;if(lot<.01){warn.textContent='Required lot is below 0.01 — minimum set to 0.01';lot=.01}lotOut.innerHTML=lot.toFixed(2)+' <span>lot</span>';slDist.textContent='$'+dist.toFixed(2);perUnit.textContent='$'+(dist*CONTRACT_SIZE*.01).toFixed(2);actualRisk.textContent='$'+(lot*dollarPerLot).toFixed(2)}
-[riskEl,entryEl,slEl].forEach(el=>el.addEventListener('input',calc));calc();
+  <div class="foot">Estimates only. Actual swap, commission, execution price and risk may differ due to broker rollover timing, contract settings and slippage. This calculator does not connect to MT5 or The5ers live data.</div>
+</div><script>
+(function () {
+  'use strict';
+  const CONTRACT_SIZE = 100;
+  const DIGITS = 2;
+  const COMMISSION_PCT = 0.03;
+  const SWAP_LONG = -70;
+  const SWAP_SHORT = -40;
+  const FRIDAY_MULTIPLIER = 10;
+  const OTHER_MULTIPLIER = 1;
+  function el(id) { return document.getElementById(id); }
+  function read(id) { return Number.parseFloat(el(id).value); }
+  function money(n) {
+    if (!Number.isFinite(n)) return '$—';
+    return n < 0 ? '-$' + Math.abs(n).toFixed(2) : '$' + n.toFixed(2);
+  }
+  function rollovers(startText, endText) {
+    if (!startText || !endText) return null;
+    const start = new Date(startText + 'T00:00:00Z');
+    const end = new Date(endText + 'T00:00:00Z');
+    if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime()) || end < start) return null;
+    const rows = [];
+    for (const d = new Date(start); d < end; d.setUTCDate(d.getUTCDate() + 1)) {
+      const day = d.getUTCDay();
+      if (day !== 0 && day !== 6) rows.push({date:d.toISOString().slice(0,10), day:day, multiplier:day === 5 ? FRIDAY_MULTIPLIER : OTHER_MULTIPLIER});
+    }
+    return rows;
+  }
+  function calc() {
+    const risk = read('risk');
+    const entry = read('entry');
+    const sl = read('sl');
+    const isBuy = el('direction').value === 'buy';
+    const warn = el('warn');
+    warn.textContent = '';
+    el('lotOut').innerHTML = '— <small>lot</small>';
+    el('lotNote').textContent = 'Enter trade details and dates';
+    ['priceLoss','swapCost','commissionCost','totalLoss'].forEach(function(id) {
+      el(id).textContent = '$—';
+      el(id).className = '';
+    });
+    if (!(risk > 0) || !(entry > 0) || !(sl > 0)) return;
+    if ((isBuy && sl >= entry) || (!isBuy && sl <= entry)) {
+      warn.textContent = 'Stop Loss must be below Entry for a Buy, and above Entry for a Sell.';
+      return;
+    }
+    const rows = rollovers(el('entryDate').value, el('exitDate').value);
+    if (!rows) {
+      warn.textContent = 'Select valid entry and exit dates. Exit date must be the same day or later than entry date.';
+      return;
+    }
+    const rate = isBuy ? SWAP_LONG : SWAP_SHORT;
+    const pointValuePerLot = CONTRACT_SIZE * Math.pow(10, -DIGITS);
+    const swapPerLot = rows.reduce(function(sum, row) {
+      return sum + Math.abs(rate) * row.multiplier * pointValuePerLot;
+    }, 0);
+    const priceLossPerLot = Math.abs(entry - sl) * CONTRACT_SIZE;
+    const commissionPerLot = (entry + sl) * CONTRACT_SIZE * (COMMISSION_PCT / 100);
+    const allInPerLot = priceLossPerLot + swapPerLot + commissionPerLot;
+    if (!(allInPerLot > 0) || !Number.isFinite(allInPerLot)) {
+      warn.textContent = 'Please check the entered values.';
+      return;
+    }
+    const rawLots = risk / allInPerLot;
+    const lots = Math.floor((rawLots + 1e-10) / 0.01) * 0.01;
+    const shownLots = Math.max(0.01, lots);
+    const priceLoss = shownLots * priceLossPerLot;
+    const swap = shownLots * swapPerLot;
+    const commission = shownLots * commissionPerLot;
+    const total = priceLoss + swap + commission;
+    el('lotOut').innerHTML = shownLots.toFixed(2) + ' <small>lot</small>';
+    el('lotNote').textContent = rows.length + ' estimated rollover(s) · ' + (lots < 0.01 ? 'minimum lot shown; exceeds risk budget' : 'lot size rounded down to 0.01');
+    el('priceLoss').textContent = money(priceLoss);
+    el('swapCost').textContent = money(swap);
+    el('commissionCost').textContent = money(commission);
+    el('totalLoss').textContent = money(total);
+    el('totalLoss').className = total > risk + 0.005 ? 'negative' : 'positive';
+    if (lots < 0.01) warn.textContent = 'Calculated lot is below the broker minimum of 0.01. Displayed 0.01 lot would risk ' + money(total) + ', above your ' + money(risk) + ' limit.';
+    else if (total > risk + 0.005) warn.textContent = 'Estimated total loss exceeds your risk limit. Reduce lot size or adjust the setup.';
+    const fridays = rows.filter(function(row) { return row.day === 5; });
+    if (fridays.length) warn.textContent += (warn.textContent ? ' ' : '') + 'Friday 10× multiplier applied on ' + fridays.map(function(row) { return row.date; }).join(', ') + '.';
+  }
+  function init() {
+    ['risk','direction','entry','sl','entryDate','exitDate'].forEach(function(id) {
+      const field = el(id);
+      if (field) {
+        field.addEventListener('input', calc);
+        field.addEventListener('change', calc);
+      }
+    });
+    calc();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
 </script>
 </body>
 </html>
