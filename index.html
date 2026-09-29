@@ -81,7 +81,7 @@ function rolloverMultipliers(startText,endText,other,fri){
   const items=[];
   for(const d=new Date(start);d<end;d.setUTCDate(d.getUTCDate()+1)){
     const day=d.getUTCDay();
-    items.push({date:d.toISOString().slice(0,10),day,multiplier:day===5?fri:other});
+    if(day!==0&&day!==6)items.push({date:d.toISOString().slice(0,10),day,multiplier:day===5?fri:other});
   }
   return items;
 }
